@@ -4,16 +4,23 @@ import "./Weather.css";
 import Footer from "./Footer";
 
 export default function Weather() {
-  const [ready, setReady] = useState(false);
-  const [temperature, setTemperature] = useState(null);
+  const [weatherData, setWeatherData] = useState({ ready: false });
 
   function handleResponse(response) {
     console.log(response.data);
-    setTemperature(Math.round(response.data.main.temp));
-    setReady(true);
+    setWeatherData({
+      ready: true,
+      temperature: Math.round(response.data.main.temp),
+      humidity: response.data.main.humidity,
+      date: "Wednesday 07:00",
+      description: response.data.weather[0].description,
+      iconUrl: "https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png",
+      wind: Math.round(response.data.wind.speed),
+      city: response.data.name,
+    });
   }
 
-  if (ready) {
+  if (weatherData.ready) {
     return (
       <div className="Weather">
         <form>
@@ -38,14 +45,14 @@ export default function Weather() {
         <div>
           <div className="row">
             <div className="col-6">
-              <h1>New York</h1>
+              <h1>{weatherData.city}</h1>
               <ul>
                 <li className="text-capitalize">
-                  Wednesday 7:00, Mostly cloudy
+                  {weatherData.date}, {weatherData.description}
                 </li>
                 <li>
-                  Humidity: <span className="highlight">72%</span>, Wind:{" "}
-                  <span className="highlight">13km/h</span>
+                  Humidity: <span className="highlight">{weatherData.humidity}%</span>, Wind:{" "}
+                  <span className="highlight">{weatherData.wind}km/h</span>
                 </li>
               </ul>
             </div>
@@ -53,10 +60,10 @@ export default function Weather() {
               <div className="temperature-container d-flex justify-content-end">
                 <div>
                   <img
-                    src="https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png"
-                    alt="Mostly cloudy"
+                    src={weatherData.iconUrl}
+                    alt={weatherData.description}
                   />
-                  <span className="temperature">{temperature}</span>
+                  <span className="temperature">{weatherData.temperature}</span>
                   <span className="units">°C</span>
                 </div>
               </div>
