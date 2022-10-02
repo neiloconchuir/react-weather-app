@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
+import FormattedDate from "./FormattedDate";
 import "./Weather.css";
 import Footer from "./Footer";
 
-export default function Weather() {
+export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
 
   function handleResponse(response) {
@@ -12,7 +13,7 @@ export default function Weather() {
       ready: true,
       temperature: Math.round(response.data.main.temp),
       humidity: response.data.main.humidity,
-      date: "Wednesday 07:00",
+      date: new Date(response.data.dt * 1000),
       description: response.data.weather[0].description,
       iconUrl: "https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png",
       wind: Math.round(response.data.wind.speed),
@@ -48,7 +49,7 @@ export default function Weather() {
               <h1>{weatherData.city}</h1>
               <ul>
                 <li className="text-capitalize">
-                  {weatherData.date}, {weatherData.description}
+                  <FormattedDate date={weatherData.date} />{weatherData.description}
                 </li>
                 <li>
                   Humidity: <span className="highlight">{weatherData.humidity}%</span>, Wind:{" "}
@@ -75,8 +76,7 @@ export default function Weather() {
     );
   } else {
     const apiKey = "6ad6478bca96e80d85e0658e8313cfc0";
-    let city = "New York";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=metric`;
     axios.get(apiUrl).then(handleResponse);
 
     return "Loading...";
