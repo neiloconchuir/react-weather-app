@@ -10,6 +10,14 @@ export default function Footer() {
         rel="noreferrer"
       >
         open-sourced on GitHub
+      </a>{" "}
+      and{" "}
+      <a
+        href="https://enchanting-wisp-e19296.netlify.app/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        hosted on Netlify
       </a>
     </footer>
   );
